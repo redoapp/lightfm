@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel", "Cython>=0.29.0", "numpy"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lightfm-py311-fix"
+dynamic = ["version"]
+description = "LightFM recommendation model"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Lyst Ltd (Maciej Kula)", email = "data@ly.st"}
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "numpy",
+    "scipy>=0.17.0",
+    "requests",
+    "scikit-learn"
+]
+
+[project.optional-dependencies]
+test = ["pytest", "requests", "scikit-learn"]
+
+[project.urls]
+"Homepage" = "https://github.com/lyst/lightfm"
+"Download" = "https://github.com/lyst/lightfm/tarball"
+
+[tool.setuptools]
+packages = ["lightfm", "lightfm.datasets"]
+
+[tool.setuptools.package-data]
+"*" = ["*.c"]
+
+[tool.setuptools.dynamic]
+version = {attr = "lightfm.version.__version__"}
+
+[tool.cibuildwheel]
+build = "cp38-* cp39-* cp310-* cp311-* cp312-*"

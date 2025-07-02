@@ -17,6 +17,10 @@ def define_extensions(use_openmp):
             compile_args += []
         else:
             compile_args += ["-march=native"]
+    
+    # Add Python 3.11+ compatibility flags
+    if sys.version_info >= (3, 11):
+        compile_args += ["-DPy_LIMITED_API=0x030B0000"]
 
     if not use_openmp:
         print("Compiling without OpenMP support.")
@@ -105,7 +109,10 @@ class Cythonize(Command):
                 fl.write(template.format(**template_params))
 
     def run(self):
-        from Cython.Build import cythonize
+        try:
+            from Cython.Build import cythonize
+        except ImportError:
+            raise ImportError("Cython is required to build LightFM from source")
 
         self.generate_pyx()
 
@@ -121,7 +128,11 @@ class Cythonize(Command):
                     extra_link_args=["-fopenmp"],
                 ),
             ],
-            compiler_directives={'language_level' : "3"}
+            compiler_directives={
+                'language_level': "3",
+                'embedsignature': True,
+                'c_api_binop_methods': True
+            }
         )
 
 
